@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  server:
+    build: backend
+    restart: always
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - database
+    networks:
+      - ai_tutor
+
+  database:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ai_tutor
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - ai_tutor
+
+  queue:
+    image: rabbitmq:3.11-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_PASSWORD}
+    ports:
+      - 15672:15672
+    networks:
+      - ai_tutor
+
+  ai_transformer:
+    build: ai_transformer
+    restart: always
+    volumes:
+      - ./ai_transformer/models/:/app/models/
+    depends_on:
+      - queue
+    networks:
+      - ai_tutor
+
+networks:
+  ai_tutor:

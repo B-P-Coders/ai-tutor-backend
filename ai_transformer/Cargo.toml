@@ -1,0 +1,13 @@
+[package]
+name = "ai_transformer"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+amqprs = "1.5.0"
+anyhow = "1.0.75"
+llm-chain = "0.12.3"
+llm-chain-llama = "0.12.3"
+tokio = { version = "1.33.0", features = ["full"] }

@@ -1,0 +1,9 @@
+# Environment
+.env
+!.env.example
+
+# MacOS
+.DS_Store
+
+# Database volume
+data/
